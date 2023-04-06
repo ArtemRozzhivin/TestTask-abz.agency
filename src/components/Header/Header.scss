@@ -1,0 +1,14 @@
+.header {
+  padding: 16px 13px;
+
+  &__menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+  }
+}
