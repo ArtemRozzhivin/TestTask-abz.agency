@@ -1,5 +1,11 @@
 .header {
-  padding: 16px 13px;
+  z-index: 2;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  left: 0;
+  padding: 13px 16px;
+  background-color: #fff;
 
   &__menu {
     display: flex;
