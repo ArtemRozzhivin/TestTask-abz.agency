@@ -4,6 +4,7 @@ import Main from './components/Blocks/Main/Main';
 
 import './App.scss';
 import Users from './components/Blocks/Users/Users';
+import Register from './components/Blocks/Register/Register';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <div className="app__wrapper">
         <Main />
         <Users />
+        <Register />
       </div>
     </div>
   );

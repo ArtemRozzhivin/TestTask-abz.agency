@@ -1,8 +1,8 @@
 import React from 'react';
 import UserCard from './UserCard/UserCard';
+import Button from '../../../ui/Button/Button';
 
 import './Users.scss';
-import Button from '../../../ui/Button/Button';
 
 const Users: React.FC = () => {
   return (
@@ -23,7 +23,7 @@ const Users: React.FC = () => {
         </div>
       </div>
       <div className="users__button">
-        <Button>Show more</Button>
+        <Button primary>Show more</Button>
       </div>
     </div>
   );

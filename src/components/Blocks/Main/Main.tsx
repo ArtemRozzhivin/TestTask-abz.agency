@@ -18,7 +18,7 @@ const Main: React.FC = () => {
           </p>
         </div>
         <div className="main__button">
-          <Button>Sign up</Button>
+          <Button primary>Sign up</Button>
         </div>
       </div>
     </div>

@@ -1,0 +1,37 @@
+.select {
+  .MuiFormLabel-root {
+    //styleName: Body 16;
+    font-family: Nunito;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #000000de;
+  }
+
+  .MuiTypography-root {
+    //styleName: Body 16;
+    font-family: Nunito;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #000000de;
+  }
+
+  .MuiSvgIcon-root {
+    color: #d0cfcf;
+  }
+
+  .MuiFormLabel-root.Mui-focused {
+    color: #000000de;
+  }
+
+  .MuiButtonBase-root.Mui-checked {
+    .MuiSvgIcon-root {
+      color: #00bdd3;
+    }
+  }
+}

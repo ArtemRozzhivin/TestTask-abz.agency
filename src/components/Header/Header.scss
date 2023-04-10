@@ -17,4 +17,11 @@
     display: flex;
     gap: 10px;
   }
+
+  @media (min-width: 1170px) {
+    width: 100%;
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 13px 0px;
+  }
 }

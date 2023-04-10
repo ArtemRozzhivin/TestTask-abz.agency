@@ -25,4 +25,23 @@
   &__button {
     margin-top: 50px;
   }
+
+  @media (min-width: 768px) {
+    margin-top: 140px;
+
+    &__list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-column-gap: 16px;
+      grid-row-gap: 16px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    &__list {
+      grid-template-columns: repeat(3, 1fr);
+      grid-column-gap: 29px;
+      grid-row-gap: 29px;
+    }
+  }
 }
