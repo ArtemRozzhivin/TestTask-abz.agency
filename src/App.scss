@@ -5,4 +5,10 @@
     max-width: 1170px;
     margin: 0 auto;
   }
+
+  @media (min-width: 1170px) {
+    &__wrapper {
+      padding: 0px;
+    }
+  }
 }

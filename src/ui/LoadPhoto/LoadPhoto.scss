@@ -1,4 +1,8 @@
-.loadPhoto{
-	display: flex;
-	align-items: center;
+.loadPhoto {
+  display: flex;
+  align-items: center;
+
+  &__status {
+    flex: 1 1 auto;
+  }
 }

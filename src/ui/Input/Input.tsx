@@ -4,20 +4,33 @@ import { TextField, ThemeProvider, createTheme } from '@mui/material';
 import './Input.scss';
 
 interface InputType {
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type: string;
   label?: string;
   helperText?: string;
-	placeholder?: string; 
+  placeholder?: string;
+  error?: boolean;
 }
 
-const Input: React.FC<InputType> = ({ label, type, helperText, placeholder }) => {
+const Input: React.FC<InputType> = ({
+  value,
+  onChange,
+
+  label,
+  type,
+  helperText,
+  placeholder,
+  error,
+}) => {
   return (
     <TextField
       className="input"
+      value={value}
+      onChange={onChange}
       fullWidth
-      // error
-			
-			placeholder={placeholder}
+      error={error}
+      placeholder={placeholder}
       label={label}
       variant="outlined"
       type={type}

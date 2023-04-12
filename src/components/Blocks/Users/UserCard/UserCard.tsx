@@ -1,19 +1,29 @@
 import React from 'react';
-
 import svg from '../../../../assets/image/photo-cover.svg';
 
 import './UserCard.scss';
+import { UserType } from '../../../../redux/users/types';
 
-const UserCard: React.FC = () => {
+const UserCard: React.FC<UserType> = ({
+  id,
+  name,
+  email,
+  phone,
+  position,
+  position_id,
+  registration_timastamp,
+  photo,
+}) => {
   return (
     <div className="card">
       <div className="card__photo">
-        <img src={svg} alt="user" />
+        <img src={photo} alt="user" />
       </div>
-      <div className="card__name">Salvador Stewart Flynn Thomas Salva...</div>
+      <div className="card__name">{name.length > 30 ? name.slice(0, 30) + '...' : name}</div>
       <div className="card__info">
-        Leading specialist of the department o... JeromeKlarkaJeromeKlarka19233623... +38 (098) 278
-        76 24
+        <div className="card__position">{position}</div>
+        <div className="card__email">{email.length > 30 ? email.slice(0, 30) + '...' : email}</div>
+        <div className="card__number">{phone}</div>
       </div>
     </div>
   );

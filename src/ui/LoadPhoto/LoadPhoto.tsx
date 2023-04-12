@@ -1,17 +1,94 @@
 import { Box, TextField } from '@mui/material';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 
-import './LoadPhoto.scss'
+import './LoadPhoto.scss';
+import { error } from 'console';
 
 const LoadPhoto = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [loadStatus, setLoadStatus] = useState({} as { status: boolean; error: string });
+  const [photo, setPhoto] = useState('');
+
+  const handleButtonClick = () => {
+    inputRef.current && inputRef.current.click();
+  };
+
+  const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files && event.target.files[0];
+
+    if (!selectedFile) {
+      setPhoto('');
+      setLoadStatus({ status: false, error: 'No file selected' });
+      return;
+    }
+
+    // Check file type
+    if (!selectedFile.type.includes('jpeg') && !selectedFile.type.includes('jpg')) {
+      setPhoto(selectedFile.name);
+      setLoadStatus({
+        status: false,
+        error: 'Invalid file type, please upload a jpeg or jpg file',
+      });
+      return;
+    }
+
+    // Check file size
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (selectedFile.size > maxSize) {
+      setPhoto(selectedFile.name);
+      setLoadStatus({
+        status: false,
+        error: 'File size is too large, please upload a file up to 5MB',
+      });
+      return;
+    }
+
+    // Check image dimensions
+    const img = new Image();
+    img.src = window.URL.createObjectURL(selectedFile);
+    img.onload = () => {
+      const { width, height } = img;
+
+      if (width < 70 || height < 70) {
+        setPhoto(selectedFile.name);
+        setLoadStatus({
+          status: false,
+          error:
+            'Image dimensions are too small, please upload an image with dimensions of at least 70x70px',
+        });
+        return;
+      }
+
+      // If all checks pass, handle the selected file
+      setPhoto(selectedFile.name);
+      setLoadStatus({ status: true, error: 'File uploaded successfully' });
+    };
+  };
+
   return (
-    <div className='loadPhoto'>
-      <Button outline>Upload</Button>
-			<div>
-      <Input placeholder='Upload your photo' type="text" />
-			</div>
+    <div className="loadPhoto">
+      <Button onClick={handleButtonClick} outline>
+        Upload
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleFileSelected(e)}
+          hidden
+        />
+      </Button>
+
+      <div className="loadPhoto__status">
+        <Input
+          error={!loadStatus.status}
+          value={photo}
+          helperText={loadStatus.error}
+          placeholder="Upload your photo"
+          type="text"
+        />
+      </div>
     </div>
   );
 };

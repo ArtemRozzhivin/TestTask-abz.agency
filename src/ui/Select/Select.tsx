@@ -2,22 +2,29 @@ import React from 'react';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 import './Select.scss';
+import { usersPosition } from '../../redux/users/types';
 
 interface SelectType {
+  onChange: (e: any) => void;
   label: string;
-  radioLabels: string[];
+  radioLabels: usersPosition[];
 }
 
-const Select: React.FC<SelectType> = ({ label, radioLabels }) => {
+const Select: React.FC<SelectType> = ({ onChange, label, radioLabels }) => {
   return (
     <FormControl className="select">
       <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel>
       <RadioGroup
+        onChange={onChange}
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue={radioLabels[0]}
         name="radio-buttons-group">
         {radioLabels.map((radioLabel) => (
-          <FormControlLabel value={radioLabel} control={<Radio />} label={radioLabel} />
+          <FormControlLabel
+            key={radioLabel.id}
+            value={radioLabel.id}
+            control={<Radio />}
+            label={radioLabel.name}
+          />
         ))}
       </RadioGroup>
     </FormControl>

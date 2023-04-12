@@ -1,9 +1,11 @@
 import React from 'react';
 import Button from '../../ui/Button/Button';
+import { HashLink } from 'react-router-hash-link';
 
 import logo from '../../assets/image/Logo.svg';
 
 import './Header.scss';
+import { scrollWithOffset } from '../../utils/scrollWithOffset';
 
 const Header: React.FC = () => {
   return (
@@ -14,10 +16,18 @@ const Header: React.FC = () => {
         </div>
         <div className="header__buttons">
           <div className="header__users">
-            <Button primary>Users</Button>
+            <Button primary>
+              <HashLink to={'#users'} scroll={(el) => scrollWithOffset(el)}>
+                Users
+              </HashLink>
+            </Button>
           </div>
           <div className="header__sign">
-            <Button primary>Sign up</Button>
+            <Button primary>
+              <HashLink to={'#signUp'} scroll={(el) => scrollWithOffset(el)}>
+                Sign Up
+              </HashLink>
+            </Button>
           </div>
         </div>
       </div>
