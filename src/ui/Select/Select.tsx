@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { usersPosition } from '../../redux/register/types';
 
 import './Select.scss';
-import { usersPosition } from '../../redux/users/types';
 
 interface SelectType {
   onChange: (e: any) => void;

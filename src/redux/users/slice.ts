@@ -8,7 +8,6 @@ const initialState: UsersState = {
   totalPages: null,
   totalUsers: null,
   page: 1,
-  usersPosition: [],
   isHaveUsers: true,
 };
 
@@ -27,8 +26,6 @@ export const usersSlice = createSlice({
       state.totalPages = action.payload.totalPages;
       state.totalUsers = action.payload.totalUsers;
       state.page = state.page + 1;
-
-      state.usersPosition = action.payload.usersPosition;
 
       state.isHaveUsers = checkIfAllUsersReceived(state.users.length, action.payload.totalUsers);
     });

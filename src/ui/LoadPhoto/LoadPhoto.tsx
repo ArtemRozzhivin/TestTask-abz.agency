@@ -1,15 +1,26 @@
-import { Box, TextField } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 
 import './LoadPhoto.scss';
-import { error } from 'console';
 
-const LoadPhoto = () => {
+interface LoadPhotoType {
+  hadlePhoto: (hadlePhoto: any) => void;
+}
+
+type LoadStatusType = {
+  value: string;
+  status: boolean;
+  error: string;
+};
+
+const LoadPhoto: React.FC<LoadPhotoType> = ({ hadlePhoto }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [loadStatus, setLoadStatus] = useState({} as { status: boolean; error: string });
-  const [photo, setPhoto] = useState('');
+  const [loadStatus, setLoadStatus] = useState({
+    value: '',
+    status: false,
+    error: '',
+  });
 
   const handleButtonClick = () => {
     inputRef.current && inputRef.current.click();
@@ -19,15 +30,14 @@ const LoadPhoto = () => {
     const selectedFile = event.target.files && event.target.files[0];
 
     if (!selectedFile) {
-      setPhoto('');
-      setLoadStatus({ status: false, error: 'No file selected' });
+      setLoadStatus({ value: '', status: false, error: 'No file selected' });
       return;
     }
 
     // Check file type
     if (!selectedFile.type.includes('jpeg') && !selectedFile.type.includes('jpg')) {
-      setPhoto(selectedFile.name);
       setLoadStatus({
+        value: selectedFile.name,
         status: false,
         error: 'Invalid file type, please upload a jpeg or jpg file',
       });
@@ -37,8 +47,8 @@ const LoadPhoto = () => {
     // Check file size
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (selectedFile.size > maxSize) {
-      setPhoto(selectedFile.name);
       setLoadStatus({
+        value: selectedFile.name,
         status: false,
         error: 'File size is too large, please upload a file up to 5MB',
       });
@@ -52,8 +62,8 @@ const LoadPhoto = () => {
       const { width, height } = img;
 
       if (width < 70 || height < 70) {
-        setPhoto(selectedFile.name);
         setLoadStatus({
+          value: selectedFile.name,
           status: false,
           error:
             'Image dimensions are too small, please upload an image with dimensions of at least 70x70px',
@@ -62,8 +72,12 @@ const LoadPhoto = () => {
       }
 
       // If all checks pass, handle the selected file
-      setPhoto(selectedFile.name);
-      setLoadStatus({ status: true, error: 'File uploaded successfully' });
+      hadlePhoto(selectedFile);
+      setLoadStatus({
+        value: selectedFile.name,
+        status: true,
+        error: 'File uploaded successfully',
+      });
     };
   };
 
@@ -82,8 +96,8 @@ const LoadPhoto = () => {
 
       <div className="loadPhoto__status">
         <Input
-          error={!loadStatus.status}
-          value={photo}
+          error={loadStatus.value !== '' && !loadStatus.status}
+          value={loadStatus.value}
           helperText={loadStatus.error}
           placeholder="Upload your photo"
           type="text"

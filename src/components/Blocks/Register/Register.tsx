@@ -4,7 +4,9 @@ import Select from '../../../ui/Select/Select';
 import Button from '../../../ui/Button/Button';
 import LoadPhoto from '../../../ui/LoadPhoto/LoadPhoto';
 import { validateEmail, validateName, validatePhoneNumber } from '../../../utils/validateInput';
-import { usersPosition } from '../../../redux/users/types';
+import { usersPosition } from '../../../redux/register/types';
+import { useAppDispatch } from '../../../redux/store';
+import { fetchAsyncRegister } from '../../../redux/register/fetchAsyncRegister';
 
 import './Register.scss';
 
@@ -13,6 +15,7 @@ interface RegisterType {
 }
 
 const Register: React.FC<RegisterType> = ({ usersPosition }) => {
+  const dispatch = useAppDispatch();
   const [isValid, setValid] = useState({
     name: false,
     phone: false,
@@ -24,16 +27,18 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
   const [isName, setName] = useState('');
   const [isEmail, setEmail] = useState('');
   const [isPhone, setPhone] = useState('');
-  const [position, setPosition] = useState<string | null>(null);
+  const [position, setPosition] = useState<number>(0!);
+  const [isPhoto, setPhoto] = useState<File>(null!);
 
   const validateForm = () => {
-    const isValidForm = Object.values(isValid).every((value) => value);
-    setButtonDisabled(!isValidForm);
+    return Object.values(isValid).every((value) => value);
   };
 
   useEffect(() => {
-    validateForm();
+    setButtonDisabled(!validateForm());
   }, [isValid, isName, isEmail, isPhone]);
+
+  console.log(isValid);
 
   const handleNameChange = (value: string) => {
     const isNameValid = validateName(value);
@@ -54,9 +59,24 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
   };
 
   const hadlePositionChange = (value: string) => {
-    console.log(value);
-    setValid((prevState) => ({ ...prevState, position: true, photo: true }));
-    setPosition(value);
+    setValid((prevState) => ({ ...prevState, position: true }));
+    setPosition(+value);
+  };
+
+  const onRegister = async () => {
+    let userData = {
+      name: isName,
+      email: isEmail,
+      phone: isPhone,
+      position_id: position,
+      photo: isPhoto,
+    };
+
+    dispatch(fetchAsyncRegister(userData));
+  };
+
+  const showError = (value: string, valid: boolean) => {
+    return value !== '' && valid;
   };
 
   return (
@@ -67,8 +87,10 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
           <Input
             value={isName}
             onChange={(e) => handleNameChange(e.target.value)}
-            error={!isValid.name}
-            helperText={!isValid.name ? 'Username should contain 2-60 characters' : ''}
+            error={showError(isName, !isValid.name)}
+            helperText={
+              showError(isName, !isValid.name) ? 'Username should contain 2-60 characters' : ''
+            }
             type="text"
             label="Your name"
           />
@@ -78,8 +100,8 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
           <Input
             value={isEmail}
             onChange={(e) => handleEmailChange(e.target.value)}
-            error={!isValid.email}
-            helperText={!isValid.email ? 'Email entered incorrectly' : ''}
+            error={showError(isEmail, !isValid.email)}
+            helperText={showError(isEmail, !isValid.email) ? 'Email entered incorrectly' : ''}
             type="email"
             label="Email"
           />
@@ -89,7 +111,7 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
           <Input
             value={isPhone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            error={!isValid.phone}
+            error={showError(isPhone, !isValid.phone)}
             type="tel"
             label="Phone"
             helperText="+38 (XXX) XXX - XX - XX"
@@ -104,10 +126,10 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
           />
         </div>
         <div className="register__photo">
-          <LoadPhoto />
+          <LoadPhoto hadlePhoto={(photo) => setPhoto(photo)} />
         </div>
         <div className="register__send">
-          <Button disabled={isButtonDisabled} primary>
+          <Button onClick={onRegister} disabled={isButtonDisabled} primary>
             Sing up
           </Button>
         </div>

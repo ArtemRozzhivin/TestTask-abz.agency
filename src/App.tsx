@@ -9,13 +9,19 @@ import { useAppDispatch } from './redux/store';
 import { fetchAsyncUsers } from './redux/users/fetchAsyncUsers';
 import { useSelector } from 'react-redux';
 import { selectUsers } from './redux/users/select';
+import { fetchAsyncPositions } from './redux/register/fetchAsyncPositions';
+import { selectRegistration } from './redux/register/select';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { users, page, isHaveUsers, usersPosition } = useSelector(selectUsers);
+  const { users, page, isHaveUsers } = useSelector(selectUsers);
+  const { positions } = useSelector(selectRegistration);
+
+  console.log(positions);
 
   useEffect(() => {
     dispatch(fetchAsyncUsers(page));
+    dispatch(fetchAsyncPositions());
   }, []);
 
   const getMoreUsers = () => {
@@ -28,7 +34,7 @@ function App() {
       <div className="app__wrapper">
         <Main />
         <Users isHaveUsers={isHaveUsers} getMoreUsers={getMoreUsers} users={users} />
-        <Register usersPosition={usersPosition} />
+        <Register usersPosition={positions} />
       </div>
     </div>
   );

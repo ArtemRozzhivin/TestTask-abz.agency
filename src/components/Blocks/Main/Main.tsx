@@ -1,5 +1,7 @@
 import React from 'react';
 import Button from '../../../ui/Button/Button';
+import { scrollWithOffset } from '../../../utils/scrollWithOffset';
+import { HashLink } from 'react-router-hash-link';
 
 import './Main.scss';
 
@@ -18,7 +20,9 @@ const Main: React.FC = () => {
           </p>
         </div>
         <div className="main__button">
-          <Button primary>Sign up</Button>
+          <HashLink to={'#signUp'} scroll={(el) => scrollWithOffset(el)}>
+            <Button primary>Sign Up</Button>
+          </HashLink>
         </div>
       </div>
     </div>

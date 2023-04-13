@@ -3,14 +3,8 @@ export interface UsersState {
   totalPages: number | null;
   totalUsers: number | null;
   page: number;
-  usersPosition: usersPosition[];
   isHaveUsers: boolean;
 }
-
-export type usersPosition = {
-  id: number;
-  name: string;
-};
 
 export interface UserType {
   id: string;
@@ -27,5 +21,4 @@ export interface fetchAsyncUsersTypeReturn {
   users: UserType[];
   totalPages: number;
   totalUsers: number;
-  usersPosition: usersPosition[];
 }

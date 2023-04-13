@@ -16,18 +16,14 @@ const Header: React.FC = () => {
         </div>
         <div className="header__buttons">
           <div className="header__users">
-            <Button primary>
-              <HashLink to={'#users'} scroll={(el) => scrollWithOffset(el)}>
-                Users
-              </HashLink>
-            </Button>
+            <HashLink to={'#users'} scroll={(el) => scrollWithOffset(el)}>
+              <Button primary>Users</Button>
+            </HashLink>
           </div>
           <div className="header__sign">
-            <Button primary>
-              <HashLink to={'#signUp'} scroll={(el) => scrollWithOffset(el)}>
-                Sign Up
-              </HashLink>
-            </Button>
+            <HashLink to={'#signUp'} scroll={(el) => scrollWithOffset(el)}>
+              <Button primary>Sign Up</Button>
+            </HashLink>
           </div>
         </div>
       </div>
