@@ -3,18 +3,32 @@ import Input from '../../../ui/Input/Input';
 import Select from '../../../ui/Select/Select';
 import Button from '../../../ui/Button/Button';
 import LoadPhoto from '../../../ui/LoadPhoto/LoadPhoto';
-import { validateEmail, validateName, validatePhoneNumber } from '../../../utils/validateInput';
-import { usersPosition } from '../../../redux/register/types';
+import {
+  validateEmail,
+  validateName,
+  validatePhoneNumber,
+  validatePhoto,
+} from '../../../utils/validateInput';
+import { responseRegister, usersPosition } from '../../../redux/register/types';
 import { useAppDispatch } from '../../../redux/store';
 import { fetchAsyncRegister } from '../../../redux/register/fetchAsyncRegister';
 
 import './Register.scss';
+import RegStatus from './RegStatus/RegStatus';
 
 interface RegisterType {
   usersPosition: usersPosition[];
+  result: responseRegister;
 }
 
-const Register: React.FC<RegisterType> = ({ usersPosition }) => {
+export type LoadPhotoType = {
+  name: string;
+  value: File | null;
+  status: boolean;
+  error: string;
+};
+
+const Register: React.FC<RegisterType> = ({ usersPosition, result }) => {
   const dispatch = useAppDispatch();
   const [isValid, setValid] = useState({
     name: false,
@@ -28,17 +42,22 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
   const [isEmail, setEmail] = useState('');
   const [isPhone, setPhone] = useState('');
   const [position, setPosition] = useState<number>(0!);
-  const [isPhoto, setPhoto] = useState<File>(null!);
+  const [photo, setPhoto] = useState<LoadPhotoType>({
+    name: '',
+    value: null,
+    status: false,
+    error: '',
+  });
+
+  console.log(result);
+
+  useEffect(() => {
+    setButtonDisabled(!validateForm());
+  }, [isValid]);
 
   const validateForm = () => {
     return Object.values(isValid).every((value) => value);
   };
-
-  useEffect(() => {
-    setButtonDisabled(!validateForm());
-  }, [isValid, isName, isEmail, isPhone]);
-
-  console.log(isValid);
 
   const handleNameChange = (value: string) => {
     const isNameValid = validateName(value);
@@ -63,16 +82,24 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
     setPosition(+value);
   };
 
-  const onRegister = async () => {
-    let userData = {
-      name: isName,
-      email: isEmail,
-      phone: isPhone,
-      position_id: position,
-      photo: isPhoto,
-    };
+  const handleFileSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isPhotoValid = await validatePhoto(event);
+    setValid((prevState) => ({ ...prevState, photo: isPhotoValid.status }));
+    setPhoto(isPhotoValid);
+  };
 
-    dispatch(fetchAsyncRegister(userData));
+  const onRegister = async () => {
+    if (photo.value !== null) {
+      let userData = {
+        name: isName,
+        email: isEmail,
+        phone: isPhone,
+        position_id: position,
+        photo: photo.value,
+      };
+
+      dispatch(fetchAsyncRegister(userData));
+    }
   };
 
   const showError = (value: string, valid: boolean) => {
@@ -126,7 +153,7 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
           />
         </div>
         <div className="register__photo">
-          <LoadPhoto hadlePhoto={(photo) => setPhoto(photo)} />
+          <LoadPhoto file={photo} hadlePhoto={(event) => handleFileSelected(event)} />
         </div>
         <div className="register__send">
           <Button onClick={onRegister} disabled={isButtonDisabled} primary>
@@ -134,6 +161,12 @@ const Register: React.FC<RegisterType> = ({ usersPosition }) => {
           </Button>
         </div>
       </form>
+
+      {result.success && (
+        <div className="register__status">
+          <RegStatus message={result.message} success={result.success} />
+        </div>
+      )}
     </div>
   );
 };

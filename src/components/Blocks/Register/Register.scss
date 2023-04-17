@@ -32,6 +32,10 @@
     text-align: center;
   }
 
+  &__status {
+    margin-top: 50px;
+  }
+
   @media (min-width: 768px) {
     &__form {
       margin: 0 auto;

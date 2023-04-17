@@ -1,3 +1,5 @@
+import { LoadPhotoType } from '../components/Blocks/Register/Register';
+
 export const validateName = (value: string) => {
   return value.length >= 2 && value.length <= 60 ? true : false;
 };
@@ -13,3 +15,114 @@ export const validatePhoneNumber = (value: string) => {
   const regex = /^[\+]{0,1}380([0-9]{9})$/;
   return regex.test(value);
 };
+
+export const validatePhoto = async (
+  event: React.ChangeEvent<HTMLInputElement>,
+): Promise<LoadPhotoType> => {
+  const selectedFile = event.target.files && event.target.files[0];
+
+  if (!selectedFile) {
+    return { name: '', value: null, status: false, error: 'No file selected' };
+  }
+
+  // Check file type
+  if (!selectedFile.type.includes('jpeg') && !selectedFile.type.includes('jpg')) {
+    return {
+      name: selectedFile.name,
+      value: selectedFile,
+      status: false,
+      error: 'Invalid file type, please upload a jpeg or jpg file',
+    };
+  }
+
+  // Check file size
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (selectedFile.size > maxSize) {
+    return {
+      name: selectedFile.name,
+      value: selectedFile,
+      status: false,
+      error: 'File size is too large, please upload a file up to 5MB',
+    };
+  }
+
+  // Check image dimensions
+  const img = new Image();
+  img.src = window.URL.createObjectURL(selectedFile);
+  await new Promise((resolve) => {
+    img.onload = () => resolve(null);
+  });
+  const { width, height } = img;
+
+  if (width < 70 || height < 70) {
+    return {
+      name: selectedFile.name,
+      value: selectedFile,
+      status: false,
+      error:
+        'Image dimensions are too small, please upload an image with dimensions of at least 70x70px',
+    };
+  }
+
+  // If all checks pass, handle the selected file
+  return {
+    name: selectedFile.name,
+    value: selectedFile,
+    status: true,
+    error: 'File uploaded successfully',
+  };
+};
+
+// export const validatePhoto = (event: React.ChangeEvent<HTMLInputElement>): LoadPhotoType => {
+//   const selectedFile = event.target.files && event.target.files[0];
+
+//   if (!selectedFile) {
+//     return { name: '', value: null, status: false, error: 'No file selected' };
+//   }
+
+//   // Check file type
+//   if (!selectedFile.type.includes('jpeg') && !selectedFile.type.includes('jpg')) {
+//     return {
+//       name: selectedFile.name,
+//       value: selectedFile,
+//       status: false,
+//       error: 'Invalid file type, please upload a jpeg or jpg file',
+//     };
+//   }
+
+//   // Check file size
+//   const maxSize = 5 * 1024 * 1024; // 5MB
+//   if (selectedFile.size > maxSize) {
+//     return {
+//       name: selectedFile.name,
+//       value: selectedFile,
+//       status: false,
+//       error: 'File size is too large, please upload a file up to 5MB',
+//     };
+//   }
+
+//   // Check image dimensions
+//   const img = new Image();
+//   img.src = window.URL.createObjectURL(selectedFile);
+//   img.onload = () => {
+//     const { width, height } = img;
+
+//     if (width < 70 || height < 70) {
+//       return {
+//         name: selectedFile.name,
+//         value: selectedFile,
+//         status: false,
+//         error:
+//           'Image dimensions are too small, please upload an image with dimensions of at least 70x70px',
+//       };
+//     }
+
+//     // If all checks pass, handle the selected file
+//     return {
+//       name: selectedFile.name,
+//       value: selectedFile,
+//       status: true,
+//       error: 'File uploaded successfully',
+//     };
+//   };
+// };

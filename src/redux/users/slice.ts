@@ -29,10 +29,7 @@ export const usersSlice = createSlice({
 
       state.isHaveUsers = checkIfAllUsersReceived(state.users.length, action.payload.totalUsers);
     });
-    builder.addCase(fetchAsyncUsers.rejected, (state, action) => {
-      console.log(action.error);
-      console.log(action.payload);
-    });
+    builder.addCase(fetchAsyncUsers.rejected, (state, action) => {});
   },
 });
 

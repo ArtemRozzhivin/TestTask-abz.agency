@@ -30,6 +30,7 @@ const Input: React.FC<InputType> = ({
       onChange={onChange}
       fullWidth
       error={error}
+      // disabled
       placeholder={placeholder}
       label={label}
       variant="outlined"

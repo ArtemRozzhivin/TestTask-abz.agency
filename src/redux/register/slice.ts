@@ -16,6 +16,7 @@ export const registerSlice = createSlice({
     builder.addCase(fetchAsyncRegister.pending, (state, action) => {});
     builder.addCase(fetchAsyncRegister.fulfilled, (state, action) => {
       console.log(action.payload);
+      state.response = action.payload;
     });
     builder.addCase(fetchAsyncRegister.rejected, (state, action) => {});
 

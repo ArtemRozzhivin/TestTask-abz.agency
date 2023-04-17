@@ -15,7 +15,7 @@ import { selectRegistration } from './redux/register/select';
 function App() {
   const dispatch = useAppDispatch();
   const { users, page, isHaveUsers } = useSelector(selectUsers);
-  const { positions } = useSelector(selectRegistration);
+  const { positions, response } = useSelector(selectRegistration);
 
   console.log(positions);
 
@@ -34,7 +34,7 @@ function App() {
       <div className="app__wrapper">
         <Main />
         <Users isHaveUsers={isHaveUsers} getMoreUsers={getMoreUsers} users={users} />
-        <Register usersPosition={positions} />
+        <Register result={response} usersPosition={positions} />
       </div>
     </div>
   );
